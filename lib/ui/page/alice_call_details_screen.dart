@@ -4,7 +4,6 @@ import 'package:flutter_alice/core/alice_core.dart';
 import 'package:flutter_alice/helper/alice_save_helper.dart';
 import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/ui/utils/alice_constants.dart';
-import 'package:flutter_alice/ui/widget/alice_call_error_widget.dart';
 import 'package:flutter_alice/ui/widget/alice_call_overview_widget.dart';
 import 'package:flutter_alice/ui/widget/alice_call_request_widget.dart';
 import 'package:flutter_alice/ui/widget/alice_call_response_widget.dart';
@@ -31,35 +30,29 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        brightness: widget.core.brightness,
-        primarySwatch: Colors.green,
-      ),
-      child: StreamBuilder<List<AliceHttpCall>>(
-        stream: widget.core.callsSubject,
-        initialData: [widget.call],
-        builder: (context, callsSnapshot) {
-          if (callsSnapshot.hasData) {
-            AliceHttpCall? call = callsSnapshot.data?.firstWhere(
-                (snapshotCall) => snapshotCall.id == widget.call.id,
-                orElse: null);
-            if (call != null) {
-              return _buildMainWidget();
-            } else {
-              return _buildErrorWidget();
-            }
+    return StreamBuilder<List<AliceHttpCall>>(
+      stream: widget.core.callsSubject,
+      initialData: [widget.call],
+      builder: (context, callsSnapshot) {
+        if (callsSnapshot.hasData) {
+          AliceHttpCall? call = callsSnapshot.data?.firstWhere(
+              (snapshotCall) => snapshotCall.id == widget.call.id,
+              orElse: null);
+          if (call != null) {
+            return _buildMainWidget();
           } else {
             return _buildErrorWidget();
           }
-        },
-      ),
+        } else {
+          return _buildErrorWidget();
+        }
+      },
     );
   }
 
   Widget _buildMainWidget() {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: AliceConstants.lightRed,
@@ -99,12 +92,6 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
     widgets.add(Tab(icon: Icon(Icons.info_outline), text: "Overview"));
     widgets.add(Tab(icon: Icon(Icons.arrow_upward), text: "Request"));
     widgets.add(Tab(icon: Icon(Icons.arrow_downward), text: "Response"));
-    widgets.add(
-      Tab(
-        icon: Icon(Icons.warning),
-        text: "Error",
-      ),
-    );
     return widgets;
   }
 
@@ -113,7 +100,6 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
     widgets.add(AliceCallOverviewWidget(widget.call));
     widgets.add(AliceCallRequestWidget(widget.call));
     widgets.add(AliceCallResponseWidget(widget.call));
-    widgets.add(AliceCallErrorWidget(widget.call));
     return widgets;
   }
 }

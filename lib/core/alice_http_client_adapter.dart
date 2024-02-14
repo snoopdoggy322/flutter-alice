@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_alice/core/alice_core.dart';
 import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/model/alice_http_request.dart';
 import 'package:flutter_alice/model/alice_http_response.dart';
+import 'package:http/http.dart';
 
 class AliceHttpClientAdapter {
   /// AliceCore instance
@@ -14,28 +14,29 @@ class AliceHttpClientAdapter {
   AliceHttpClientAdapter(this.aliceCore);
 
   /// Handles httpClientRequest and creates http alice call from it
-  void onRequest(HttpClientRequest request, {dynamic body}) {
+  void onRequest(BaseRequest request,) {
     AliceHttpCall call = AliceHttpCall(request.hashCode);
     call.loading = true;
     call.client = "HttpClient (io package)";
     call.method = request.method;
-    call.uri = request.uri.toString();
+    call.uri = request.url.toString();
 
-    var path = request.uri.path;
+    var path = request.url.path;
     if (path.length == 0) {
       path = "/";
     }
 
     call.endpoint = path;
-    call.server = request.uri.host;
-    if (request.uri.scheme == "https") {
+    call.server = request.url.host;
+    if (request.url.scheme == "https") {
       call.secure = true;
     }
     AliceHttpRequest httpRequest = AliceHttpRequest();
-    if (body == null) {
+    if (request is! Request) {
       httpRequest.size = 0;
       httpRequest.body = "";
     } else {
+      var body=request.body;
       httpRequest.size = utf8.encode(body.toString()).length;
       httpRequest.body = body;
     }
@@ -52,7 +53,6 @@ class AliceHttpClientAdapter {
     }
 
     httpRequest.contentType = contentType;
-    httpRequest.cookies = request.cookies;
 
     call.request = httpRequest;
     call.response = AliceHttpResponse();
@@ -60,12 +60,11 @@ class AliceHttpClientAdapter {
   }
 
   /// Handles httpClientRequest and adds response to http alice call
-  void onResponse(HttpClientResponse response, HttpClientRequest request,
-      {dynamic body}) async {
+  void onResponse(BaseResponse response) async {
     AliceHttpResponse httpResponse = AliceHttpResponse();
     httpResponse.status = response.statusCode;
-
-    if (body != null) {
+    if (response is Response) {
+      var body=response.body;
       httpResponse.body = body;
       httpResponse.size = utf8.encode(body.toString()).length;
     } else {
@@ -78,6 +77,7 @@ class AliceHttpClientAdapter {
       headers[header] = values.toString();
     });
     httpResponse.headers = headers;
+    var request=response.request;
     aliceCore.addResponse(httpResponse, request.hashCode);
   }
 }

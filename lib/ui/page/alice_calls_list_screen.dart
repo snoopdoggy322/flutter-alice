@@ -4,6 +4,7 @@ import 'package:flutter_alice/helper/alice_alert_helper.dart';
 import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/model/alice_menu_item.dart';
 import 'package:flutter_alice/ui/page/alice_call_details_screen.dart';
+import 'package:flutter_alice/ui/page/alice_events_calls_screen.dart';
 import 'package:flutter_alice/ui/utils/alice_constants.dart';
 import 'package:flutter_alice/ui/widget/alice_call_list_item_widget.dart';
 
@@ -21,33 +22,33 @@ class AliceCallsListScreen extends StatefulWidget {
 class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   AliceCore get aliceCore => widget._aliceCore;
   bool _searchEnabled = false;
-  final TextEditingController _queryTextEditingController =
-      TextEditingController();
+  final TextEditingController _queryTextEditingController = TextEditingController();
   List<AliceMenuItem> _menuItems = [];
 
   _AliceCallsListScreenState() {
-    _menuItems.add(AliceMenuItem("Delete", Icons.delete));
+    _menuItems.add(AliceMenuItem("Clear log", Icons.delete));
     _menuItems.add(AliceMenuItem("Stats", Icons.insert_chart));
-    _menuItems.add(AliceMenuItem("Save", Icons.save));
+    //_menuItems.add(AliceMenuItem("Save", Icons.save));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        brightness: widget._aliceCore.brightness,
-        primarySwatch: Colors.green,
+    return Scaffold(
+      appBar: AppBar(
+        title: _searchEnabled ? _buildSearchField() : _buildTitleWidget(),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.line_style),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => AliceEventsCallsScreen(aliceCore: aliceCore)));
+            },
+          ),
+          _buildSearchButton(),
+          _buildMenuButton(),
+        ],
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: _searchEnabled ? _buildSearchField() : _buildTitleWidget(),
-          actions: [
-            _buildSearchButton(),
-            _buildMenuButton(),
-          ],
-        ),
-        body: _buildCallsListWrapper(),
-      ),
+      body: _buildCallsListWrapper(),
     );
   }
 
@@ -124,6 +125,9 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
     if (menuItem.title == "Stats") {
       _showStatsScreen();
     }
+    if (menuItem.title == 'Save') {
+      _saveToFile();
+    }
   }
 
   Widget _buildCallsListWrapper() {
@@ -133,10 +137,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
         List<AliceHttpCall> calls = snapshot.data ?? [];
         String query = _queryTextEditingController.text.trim();
         if (query.isNotEmpty) {
-          calls = calls
-              .where((call) =>
-                  call.endpoint.toLowerCase().contains(query.toLowerCase()))
-              .toList();
+          calls = calls.where((call) => call.endpoint.toLowerCase().contains(query.toLowerCase())).toList();
         }
         if (calls.isNotEmpty) {
           return _buildCallsListWidget(calls);
@@ -225,6 +226,9 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
         builder: (context) => AliceStatsScreen(widget._aliceCore),
       ),
     );
+  }
+  Future<void> _saveToFile() async {
+   //todo
   }
 
   void _updateSearchQuery(String query) {

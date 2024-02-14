@@ -37,8 +37,6 @@ class AliceSaveHelper {
     stringBuffer.write("Request time: ${call.request!.time}\n");
     stringBuffer.write("Request content type: ${call.request!.contentType}\n");
     stringBuffer
-        .write("Request cookies: ${_encoder.convert(call.request!.cookies)}\n");
-    stringBuffer
         .write("Request headers: ${_encoder.convert(call.request!.headers)}\n");
     stringBuffer.write(
         "Request size: ${AliceConversionHelper.formatBytes(call.request!.size)}\n");
