@@ -119,7 +119,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   }
 
   void _onMenuItemSelected(AliceMenuItem menuItem) {
-    if (menuItem.title == "Delete") {
+    if (menuItem.title == "Clear log") {
       _showRemoveDialog();
     }
     if (menuItem.title == "Stats") {
