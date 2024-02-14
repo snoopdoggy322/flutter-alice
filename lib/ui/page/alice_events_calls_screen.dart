@@ -37,9 +37,9 @@ class AliceEventsCallsScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SelectableText(events[index].channel,style: TextStyle(color: Colors.green,fontSize: 24),),
+                                  SelectableText(events[index].event,style: TextStyle(color: Colors.green,fontSize: 24),),
                                   const SizedBox(height: 4),
-                                  SelectableText('Channel: '+events[index].event,style: TextStyle(fontSize: 16)),
+                                  SelectableText('Channel: '+events[index].channel,style: TextStyle(fontSize: 16)),
                                   const SizedBox(height: 4),
                                   SelectableText('Payload: '+events[index].eventPayload),
                                 ],
