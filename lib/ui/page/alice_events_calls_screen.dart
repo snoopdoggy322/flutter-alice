@@ -9,6 +9,16 @@ class AliceEventsCallsScreen extends StatelessWidget {
   const AliceEventsCallsScreen({Key? key, required this.aliceCore}) : super(key: key);
 
 
+  String _formatTime(DateTime time) {
+    return "${formatTimeUnit(time.hour)}:"
+        "${formatTimeUnit(time.minute)}:"
+        "${formatTimeUnit(time.second)}:"
+        "${formatTimeUnit(time.millisecond)}";
+  }
+
+  String formatTimeUnit(int timeUnit) {
+    return (timeUnit < 10) ? "0$timeUnit" : "$timeUnit";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +52,7 @@ class AliceEventsCallsScreen extends StatelessWidget {
                                   SelectableText('Channel: '+events[index].channel,style: TextStyle(fontSize: 16)),
                                   const SizedBox(height: 4),
                                   SelectableText('Payload: '+events[index].eventPayload),
+                                  SelectableText(_formatTime(events[index].timestamp.toLocal())),
                                 ],
                               ),
                             ),

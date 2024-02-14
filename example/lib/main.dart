@@ -49,8 +49,11 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 child: Text("Add socket event"),
                 onPressed: () {
-                  _alice.addEvent(
-                      AliceEvent(channel: 'ch1', event: 'event 123123', eventPayload: 'reververververmvlermvoimrb'));
+                  _alice.addEvent(AliceEvent(
+                      channel: 'ch1',
+                      event: 'event 123123',
+                      eventPayload: 'reververververmvlermvoimrb',
+                      timestamp: DateTime.now()));
                 },
               ),
               const SizedBox(height: 24),
