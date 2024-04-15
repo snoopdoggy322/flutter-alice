@@ -4,6 +4,7 @@ import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/model/alice_http_error.dart';
 import 'package:flutter_alice/model/alice_http_response.dart';
 import 'package:flutter_alice/model/alice_event.dart';
+import 'package:flutter_alice/model/alice_log.dart';
 import 'package:flutter_alice/ui/page/alice_calls_list_screen.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,6 +18,9 @@ class AliceCore {
 
   /// Rx subject which contains all intercepted events
   final BehaviorSubject<List<AliceEvent>> eventsSubject = BehaviorSubject.seeded([]);
+
+  /// Rx subject which contains all intercepted logs
+  final BehaviorSubject<List<AliceLog>> logsSubject = BehaviorSubject.seeded([]);
 
 
   GlobalKey<NavigatorState>? _navigatorKey;
@@ -48,6 +52,7 @@ class AliceCore {
   void dispose() {
     callsSubject.close();
     eventsSubject.close();
+    logsSubject.close();
   }
 
   /// Get currently used brightness
@@ -89,6 +94,10 @@ class AliceCore {
 
   void addEvent(AliceEvent event) {
     eventsSubject.add([event, ...eventsSubject.value]);
+  }
+
+  void addLog(AliceLog event) {
+    logsSubject.add([event, ...logsSubject.value]);
   }
 
   /// Add error to exisng alice http call

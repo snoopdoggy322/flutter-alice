@@ -7,9 +7,11 @@ import 'package:flutter_alice/core/alice_http_client_adapter.dart';
 import 'package:flutter_alice/model/alice_event.dart';
 import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/model/alice_http_error.dart';
+import 'package:flutter_alice/model/alice_log.dart';
 import 'package:http/http.dart' as http;
 export 'package:flutter_alice/ui/widget/alice_app_wrapper.dart';
 export 'package:flutter_alice/model/alice_event.dart';
+export 'package:flutter_alice/model/alice_log.dart';
 
 class Alice {
 
@@ -82,6 +84,11 @@ class Alice {
   /// Adds new log to Alice logger.
   void addError(AliceHttpError error, int requestId) {
     _aliceCore.addError(error,requestId);
+  }
+
+  /// Adds new log to Alice logger.
+  void addLog(AliceLog log) {
+    _aliceCore.addLog(log);
   }
 
 }

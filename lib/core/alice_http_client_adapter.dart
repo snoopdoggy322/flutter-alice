@@ -42,7 +42,7 @@ class AliceHttpClientAdapter {
     }
     httpRequest.time = DateTime.now();
     Map<String, dynamic> headers = Map();
-    httpRequest.headers.forEach((header, value) {
+    request.headers.forEach((header, value) {
       headers[header] = value;
     });
 

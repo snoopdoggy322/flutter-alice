@@ -5,6 +5,7 @@ import 'package:flutter_alice/model/alice_http_call.dart';
 import 'package:flutter_alice/model/alice_menu_item.dart';
 import 'package:flutter_alice/ui/page/alice_call_details_screen.dart';
 import 'package:flutter_alice/ui/page/alice_events_calls_screen.dart';
+import 'package:flutter_alice/ui/page/alice_log_list_screen.dart';
 import 'package:flutter_alice/ui/utils/alice_constants.dart';
 import 'package:flutter_alice/ui/widget/alice_call_list_item_widget.dart';
 
@@ -40,8 +41,14 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
           IconButton(
             icon: Icon(Icons.line_style),
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => AliceEventsCallsScreen(aliceCore: aliceCore)));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => AliceEventsCallsScreen(aliceCore: aliceCore)));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.list_alt),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => AliceLogListScreen(aliceCore: aliceCore)));
             },
           ),
           _buildSearchButton(),
@@ -227,8 +234,9 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
       ),
     );
   }
+
   Future<void> _saveToFile() async {
-   //todo
+    //todo
   }
 
   void _updateSearchQuery(String query) {

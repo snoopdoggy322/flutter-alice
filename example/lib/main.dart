@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:alice_example/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alice/alice.dart';
@@ -56,6 +58,13 @@ class _MyAppState extends State<MyApp> {
                       timestamp: DateTime.now()));
                 },
               ),
+              ElevatedButton(
+                child: Text("Add log"),
+                onPressed: () {
+                  _alice.addLog(AliceLog(
+                      title: '123', error: Exception('wedwed'), stackTrace: StackTrace.fromString('fjergnekjrgn'),level: Random().nextInt(50)));
+                },
+              ),
               const SizedBox(height: 24),
               _getTextWidget("After clicking on buttons above, you should receive notification."
                   " Click on it to show inspector. You can also shake your device or click button below."),
@@ -81,7 +90,7 @@ class _MyAppState extends State<MyApp> {
   void _runHttpHttpRequests() async {
     _runHttpInspector();
     Map<String, dynamic> body = {"title": "foo", "body": "bar", "userId": "1"};
-    _httpService.post('https://httpbin.org/status/500', body: body, headers: {});
+    _httpService.post('https://httpbin.org/status/500', body: body, headers: {'123': '123123'});
     _httpService.post('https://httpbin.org/status/400', body: body, headers: {});
     _httpService.post('https://httpbin.org/status/300', body: body, headers: {});
     _httpService.post('https://httpbin.org/status/200', body: body, headers: {});
