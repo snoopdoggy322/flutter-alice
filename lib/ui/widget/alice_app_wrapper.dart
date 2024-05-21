@@ -6,8 +6,9 @@ class AliceAppWrapper extends StatefulWidget {
   final bool isActive;
   final Alice alice;
   final Widget? child;
+  final VoidCallback? onNewScreen;
 
-  const AliceAppWrapper({Key? key, required this.isActive, required this.alice, required this.child}) : super(key: key);
+  const AliceAppWrapper({Key? key, required this.isActive, required this.alice, required this.child, this.onNewScreen}) : super(key: key);
 
   @override
   State<AliceAppWrapper> createState() => _AliceAppWrapperState();
@@ -33,9 +34,11 @@ class _AliceAppWrapperState extends State<AliceAppWrapper> {
                 widget.alice.getNavigatorKey()?.currentContext ?? context,
                 "Hide button?",
                 'The hidden button will only work when you reopen the application',
-                firstButtonTitle: "No",
-                firstButtonAction: () => {},
-                secondButtonTitle: "Yes",
+                firstButtonTitle: "Go QA screen",
+                firstButtonAction: () => {
+                  widget.onNewScreen?.call()
+                },
+                secondButtonTitle: "Hide",
                 secondButtonAction: () => setState(() {
                   isHidden = true;
                 }),
