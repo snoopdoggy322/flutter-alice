@@ -34,7 +34,7 @@ class _AliceAppWrapperState extends State<AliceAppWrapper> {
                 widget.alice.getNavigatorKey()?.currentContext ?? context,
                 "Hide button?",
                 'The hidden button will only work when you reopen the application',
-                firstButtonTitle: "Go QA screen",
+                firstButtonTitle: "Go to QA screen",
                 firstButtonAction: () => {
                   widget.onNewScreen?.call()
                 },
